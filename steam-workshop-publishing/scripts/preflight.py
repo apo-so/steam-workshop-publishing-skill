@@ -209,6 +209,8 @@ def gate(d):
         require('no_existing_item_verified')
     else:
         reasons.append('mode_unknown')
+    if d.get('observed_workshop_status') in {'email_verification_pending', 'moderation_pending'}:
+        reasons.append('existing_submission_pending')
     if d.get('previous_submission_resolved') is not True:
         reasons.append('previous_submission_unresolved')
     route = d.get('route')
@@ -225,7 +227,7 @@ def gate(d):
     if route == 'ck3-launcher' and d.get('appid') != '1158310':
         reasons.append('ck3_appid_mismatch')
     for flag in ('network_available', 'community_reachable', 'required_service_reachable',
-                 'session_authenticated_by_user', 'account_permission_verified', 'game_access_verified',
+                 'session_authenticated_by_user', 'account_permission_verified', 'ugc_submission_eligible', 'game_access_verified',
                  'route_supported', 'current_route_limits_checked', 'package_reviewed',
                  'description_reviewed', 'description_within_budget', 'media_reviewed',
                  'media_within_applicable_budget', 'fields_reviewed', 'legal_status_confirmed_by_user',

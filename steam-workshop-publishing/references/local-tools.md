@@ -13,6 +13,15 @@ python scripts/preflight.py preview description.bbcode review.html
 
 支持小范围 BBCode：配对 `h1/h2/h3`、`b/i/u/strike`、`list/olist`（`[*]` 项）、`hr`（空配对）、`url=https://...`（或 http）。遇不支持的标签、带方括号的未知语法、错配、嵌入媒体等时报告 `unsupported_or_malformed`，显示原文而非静默丢弃。并非完整 Steam 解析器，自动嵌入、复杂排版、裸 URL 与最终浏览器效果须人工检查。即使状态为 `approximate_subset` 也不表示 Steam 一定支持或显示一致；手机/桌面外观、图片和链接由人工确认。
 
+## 预览图转换
+
+```shell
+python scripts/convert_preview.py cover.webp thumbnail.png --role ck3-thumbnail --max-edge 640
+python scripts/convert_preview.py frame.png gallery.jpg --role web-gallery --max-edge 1600 --matte "#17212A"
+```
+
+工具离线读取静态图片，按需等比缩小（不放大），明确生成新的 PNG/JPEG，不通过改后缀冒充转换。PNG 可保留透明；JPEG 需要为透明背景显式选定底色。工具移除 EXIF 等源元数据，并拒绝多帧输入、过大的解码图片及覆盖已有文件；转换后应人工核对色彩、裁切与文字。CK3 主图和 API 图片使用本地低于 1,000,000 字节的保守预算；网页画廊仍需当场核对。不会上传。用下方命令复查输出后，再按所选渠道走已获授权的上传步骤。
+
 ## 图片
 
 ```shell
@@ -55,10 +64,11 @@ python scripts/preflight.py gate review-facts.json
 | `intent`, `game`, `title`, `version`, `action` | 当前意图、游戏、目标名称、待发布版本、明确具体动作；`action` 不代替人工核对动作范围 |
 | `appid`, `mode`, `item_id` | AppID 与 item ID 用十进制字符串（防止大整数精度损失）；`create` 或 `update`；初发 ID 可缺失/空/字符串 0，更新须非零 |
 | `item_identity_verified`, `no_existing_item_verified`, `previous_submission_resolved` | 更新身份交叉确认 / 初发没有对应条目已核 / 无未解决的上次提交；根据模式要求相应字段 |
+| `observed_workshop_status` | 可选记录当场观察到的状态；`email_verification_pending` 或 `moderation_pending` 会阻止再次提交，先保留 ID 并处理原状态 |
 | `route`, `route_supported`, `official_steamcmd_support` | `ck3-launcher`、`game-client`、`steamcmd` 或 `web-editor`（仅既有条目的编辑）；渠道经验证支持当前动作；SteamCMD 另要求游戏官方支持 |
 | `steam_client_running`, `steam_online_mode` | 仅 CK3 / 游戏客户端路线检查；SteamCMD 不以运行桌面客户端为条件 |
 | `network_available`, `community_reachable`, `required_service_reachable` | 网络、Steam 社区及该动作需要的服务实际可达；仅连通网络不能证明后两项 |
-| `session_authenticated_by_user`, `account_permission_verified`, `game_access_verified` | 用户本人已完成认证、对应写权限和适用游戏资格已核；不传凭据 |
+| `session_authenticated_by_user`, `account_permission_verified`, `ugc_submission_eligible`, `game_access_verified` | 用户本人已完成认证、对应写权限、账号无创意工坊投稿限制和适用游戏资格均已核；不传凭据 |
 | `visibility`, `update_fields` | `private` / `friends-only` / `public` / `unlisted` / `unchanged`（以入口真实支持为准）；非空字段列表，由人工确认保留和改动差异 |
 | `package_reviewed`, `description_reviewed`, `description_within_budget` | 内容白名单与哈希/路径/秘密已人工核查、正文已审、正文满足字节预算 |
 | `media_reviewed`, `media_within_applicable_budget`, `current_route_limits_checked` | 图像与角色已核、符合对应渠道预算、当场核查入口限制；无媒体变更需确认旧媒体保留，不能用 API 限制替代网页上限 |

@@ -15,7 +15,7 @@ except ImportError:
 def ready():
     d = {k: True for k in ('item_identity_verified', 'previous_submission_resolved',
         'steam_client_running', 'steam_online_mode', 'network_available', 'community_reachable',
-        'required_service_reachable', 'session_authenticated_by_user', 'account_permission_verified',
+        'required_service_reachable', 'session_authenticated_by_user', 'account_permission_verified', 'ugc_submission_eligible',
         'game_access_verified', 'route_supported', 'current_route_limits_checked', 'package_reviewed',
         'description_reviewed', 'description_within_budget', 'media_reviewed',
         'media_within_applicable_budget', 'fields_reviewed', 'legal_status_confirmed_by_user',
@@ -62,6 +62,21 @@ class GateTests(unittest.TestCase):
     def test_uncertain_previous_submission(self):
         d = ready(); d['previous_submission_resolved'] = False
         self.assertIn('previous_submission_unresolved', p.gate(d)['blocking'])
+
+    def test_limited_account_cannot_submit_online(self):
+        d = ready(); d['ugc_submission_eligible'] = False
+        self.assertIn('ugc_submission_eligible', p.gate(d)['blocking'])
+        d['intent'] = 'preview'
+        self.assertEqual('offline_preparation_only', p.gate(d)['status'])
+
+    def test_existing_visible_to_owner_pending_is_not_a_new_item(self):
+        d = ready(); d.update(mode='create', observed_workshop_status='moderation_pending')
+        r = p.gate(d)
+        self.assertIn('existing_id_on_create', r['blocking'])
+        self.assertIn('existing_submission_pending', r['blocking'])
+        self.assertFalse(r['external_action_performed'])
+        d['observed_workshop_status'] = 'email_verification_pending'
+        self.assertIn('existing_submission_pending', p.gate(d)['blocking'])
 
     def test_wrong_appid(self):
         d = ready(); d['appid'] = '1'

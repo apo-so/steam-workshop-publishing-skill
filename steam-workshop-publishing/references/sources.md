@@ -12,6 +12,8 @@
 | 创建、更新、回执、协议 | Valve [Workshop Implementation Guide](https://partner.steamgames.com/doc/features/workshop/implementation)，Creating a Workshop Item / Uploading a Workshop Item / Workshop Legal Agreement | 游戏 AppID、保存 PublishedFileId、提交回调和协议检查；未经同意的可见性不能推定。未确认的上传必须回读。 |
 | SteamCMD | 同一 [Implementation Guide — SteamCmd Integration](https://partner.steamgames.com/doc/features/workshop/implementation#SteamCmd_Integration) | Valve 将其作为测试集成，说明 VDF 及初发/更新 ID 语义；不是所有游戏的通用用户上传承诺。 |
 | 离线模式 | [Steam Support — Offline Mode](https://help.steampowered.com/en/faqs/view/0E18-319B-E34B-B2C8) | 本次直接页面正文仅返回图像占位，但公开搜索索引返回 FAQ 正文，明确需要连接的客户端功能在离线模式不可用。连通性必须现场检查。 |
+| 受限账户与投稿 | [Steam 受限账户说明](https://help.steampowered.com/en/faqs/view/71d3-35c2-ad96-aa3a) | 受限账户不能投稿。Steam 按符合条件的支出判定，不以能否玩某款游戏判定；本指南不要求为检查而消费。 |
+| 验证与审核 | [Steam 投稿审核说明](https://help.steampowered.com/en/wizard/HelpWithUGCSubmission) | 部分用户需验证邮箱；某些社区中心审核完成前作者仍可见，而订阅者可能保留上一核准版。不是对任意条目的当前状态或审核时长保证。 |
 | BBCode | [Steam Community — Text Formatting](https://steamcommunity.com/comment/ForumTopic/formattinghelp) | 公共格式说明，包括标题、加粗、链接和列表等；不同 Workshop UI 的最终渲染仍需核对。 |
 | CK3 AppID | [Steam 商店 — Crusader Kings III](https://store.steampowered.com/app/1158310/Crusader_Kings_III/) | AppID 1158310 及 Workshop 功能；不证明任意上传入口可用。 |
 | CK3 启动器步骤 | 社区 Wiki [Modding](https://ck3.paradoxwikis.com/Modding) 原站 401；公开 [镜像：Modding](https://github.com/jesec/ck3-modding-wiki/blob/master/wiki_pages/Modding.md) 的 Uploading/updating a mod 章节可读 | 社区参考支持 Mod library / Upload Mod / 选择平台 / thumbnail.png / 初发私有的既有描述；非当前官方逐屏保证。不能实测确认按钮、自动覆盖、初发可见性。 |
